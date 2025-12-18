@@ -1,0 +1,298 @@
+/* src/components/Layout/NavBar/NavBar.module.css */
+
+/* Wrap cart and hamburger side-by-side */
+.cartHamburgerWrapper {
+  display: flex;
+  align-items: center;  /* vertically center buttons */
+  gap: 1rem;            /* horizontal space between buttons */
+}
+
+/* Make sure cart button keeps its styling */
+.cartButton {
+  position: relative;
+  background-size: 1.25rem 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--clr-blush);
+  background-image: url('/images/SVG/cart.png'); /* correct the path if needed */
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, background-image 0.2s ease;
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--clr-blush);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cartIcon {
+  width: 1.35rem;   /* tweak if you want */
+  height: 1.35rem;
+  object-fit: contain;
+  display: block;
+}
+
+.desktopNav {
+  display: flex;
+  margin-left: auto;
+  max-width: 600px;        /* optional max width */
+  margin-right: 1.5rem;
+}
+
+
+.navList {
+  display: flex;
+  width: 100%;
+  list-style: none;
+  margin: auto; 
+  padding: 0;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+.logo {
+  background: transparent;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Hamburger shown only on mobile */
+  .hamburger {
+    display: block;
+  }
+
+  /* Desktop nav hidden on mobile */
+  .desktopNav {
+    display: none;
+  }
+}
+
+/* Header wrapper */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  background-color: var(--clr-sandstone);
+  position: relative;
+  z-index: 1000;
+  height: 150px;
+}
+
+/* Logo area */
+.logo {
+  cursor: pointer;
+}
+.logoImage {
+  height: 7rem;
+  display: block;
+  margin: 3rem;
+}
+
+/* Desktop navigation */
+.desktopNav {
+  display: flex;
+  margin-left: auto;
+}
+
+/* Uniform link buttons */
+.navLink {
+  box-sizing: border-box;
+  width: 10rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  white-space: nowrap;
+  text-align: center;
+  background-color: var(--clr-blush);
+  color: var(--clr-mist);
+  font-family: var(--ff-heading);
+  font-size: var(--fs-base);
+  font-weight: 700; /* bold */
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.navLink:hover {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+  border-style: solid;   
+  border-width: 1px; 
+}
+
+.navLink:focus {
+  outline: none;
+}
+
+/* Active link indicator */
+.active {
+  box-shadow: inset 0 -2px 0 var(--clr-primary);
+}
+
+/* Cart button (pill with icon via CSS) */
+.cartButton {
+  position: relative;
+  background-size: 1.25rem 1.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--clr-blush);
+  background-image: url('/public/images/SVG/cart.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, background-image 0.2s ease;
+  margin-right: 3rem;
+  border-style: solid;    
+  border-width: 1px; 
+  border-color: var(--clr-blush);
+  overflow: visible;
+}
+.cartButton:hover,
+.cartButton:focus {
+  background-color: var(--clr-mist);
+  background-image: url('/public//images//SVG//cart-blush.svg.png');
+  outline: none;
+}
+
+/* Badge for cart count */
+.badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--clr-charcoal);
+  color: var(--clr-mist);
+  font-size: var(--fs-small);
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+}
+
+/* Hamburger toggle for mobile */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.hamburgerIcon {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Mobile off-canvas menu (hidden by default) */
+.mobileMenu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 70%;
+  height: 100vh;
+  background-color: var(--clr-mist);
+  flex-direction: column;
+  padding: 2rem;
+  gap: 1.5rem;
+  transition: right 0.3s ease;
+  z-index: 1001;
+}
+.mobileMenu.open {
+  right: 0;
+  display: flex;
+}
+
+/* Mobile menu header */
+.mobileMenuHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--clr-charcoal);
+  cursor: pointer;
+}
+
+/* Mobile navigation links */
+.mobileNavList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.mobileNavLink,
+.mobileCartLink {
+  background: none;
+  border: none;
+  font-family: var(--ff-body);
+  font-size: var(--fs-base);
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.5rem 0;
+  color: var(--clr-text);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.mobileNavLink:hover,
+.mobileCartLink:hover {
+  color: var(--clr-blush);
+}
+
+/* Shrink logo on mobile */
+@media (max-width: 768px) {
+  
+  .cartButton {
+    margin-right: 0;
+    z-index: 1100; /* Above mobile menu */
+  }
+
+  /* Optional - add this */
+.cartButton.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+  
+  .logoImage {
+    margin: 1rem;
+  }
+  .desktopNav {
+    display: none;
+  }
+  .hamburger {
+    display: block;
+    margin-left: 0; /* reset margin */
+  }
+
+  .hamburger, .closeButton {
+    box-sizing: border-box;
+    padding-right: 1rem;
+  }
+
+  .cartHamburgerWrapper {
+    top: 1rem;          /* distance from top */
+    right: 1rem;        /* distance from right */
+    z-index: 1100;      /* above other elements */
+    display: flex;
+    gap: 1rem;
+    background: transparent; /* no background */
+    margin: 0;           /* reset margin */
+  }
+  
+}
+

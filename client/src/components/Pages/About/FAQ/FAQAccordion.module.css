@@ -1,0 +1,99 @@
+/* src/components/Pages/About/FAQAccordion.module.css */
+.faqContainer {
+  margin: 2rem 0;
+}
+
+.faqTitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--clr-charcoal);
+}
+
+.noQuestions {
+  padding: 1rem;
+  background: var(--clr-mist);
+  border-radius: 4px;
+  text-align: center;
+}
+
+/* Question row button (reset global button styles) */
+.faqQuestion {
+  all: unset;
+  box-sizing: border-box;
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+
+  padding: 1.1rem 0;
+  cursor: pointer;
+}
+
+.faqQuestion:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(169, 113, 100, 0.35);
+  border-radius: 10px;
+}
+
+
+/* + / − circle */
+.faqIcon {
+  box-sizing: border-box;
+  flex: 0 0 auto;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1.5px solid var(--clr-mist);
+
+  display: grid;
+  place-items: center;
+
+  background: var(--clr-blush);
+  color: var(--clr-mist);
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size:  1.3rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
+/* X close button */
+.faqCloseButton {
+  all: unset;
+  box-sizing: border-box;
+
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1.5px solid var(--clr-blush);
+  background: transparent;
+  color: var(--clr-blush);
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.faqCloseButton:hover {
+  background: rgba(169, 113, 100, 0.08);
+}
+.faqCloseButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(169, 113, 100, 0.35); 
+  border-radius: 999px;
+}

@@ -1,0 +1,350 @@
+/* src/components/Pages/About/About.module.css */
+
+/* ─── ROOT CONTAINER ─────────────────────────────────────────────────────── */
+/* Ensures a light background and some padding around the entire About page */
+.aboutContainer {
+  background-color: var(--clr-mist);
+  /* Push content below a fixed navbar if you have one. Adjust if needed: */
+  padding-top: var(--header-height, 150px);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Section title (“About Montessart”) centered above the grid */
+.sectionTitle {
+  font-family: var(--ff-heading);
+  color: var(--clr-blush);
+  text-align: center;
+  margin: 2rem 1rem;
+}
+
+/* ─── TWO‐COLUMN GRID ─────────────────────────────────────────────────────── */
+/* On narrow screens it collapses into a single column; on wider screens, two columns */
+/* About.module.css */
+.gridLayout {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile default */
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+@media (min-width: 1024px) {
+  .gridLayout {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+    position: relative;
+  }
+}
+
+/* ─── LEFT COLUMN (TEXT) ─────────────────────────────────────────────────── */
+/* Contains all paragraphs and sub‐headings */
+.textColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Sub‐heading inside each contentBlock */
+.sectionHeading {
+  font-family: var(--ff-heading);
+  font-size: 1.25rem;
+  color: var(--clr-charcoal);
+  margin: 0;
+}
+
+/* Paragraph text inside each contentBlock */
+.sectionText {
+  font-family: var(--ff-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--clr-text);
+  margin: 0;
+}
+
+/* Small horizontal divider between content blocks */
+.divider {
+  border: none;
+  border-bottom: 1px solid var(--clr-charcoal);
+  margin: 1rem 0;
+  width: 100%;
+  opacity: 0.2;
+}
+
+/* ─── RIGHT COLUMN (IMAGE + FAQ TOGGLE) ──────────────────────────────────── */
+.imageColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: -3rem; /* Pull image stack upwards */
+  padding-top: 1rem;
+}
+
+
+
+/* Container around the image (optional wrapper) */
+.imageContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.fabricImage {
+  width: 100%;
+  height: auto;
+  max-height: 180px;  /* To control image height */
+  object-fit: cover;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.imageStack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+
+
+/* FAQ toggle button */
+.faqToggle {
+  box-sizing: border-box;
+  width: 10rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  white-space: nowrap;
+  text-align: center;
+  background-color: var(--clr-blush);
+  color: var(--clr-mist);
+  font-family: var(--ff-heading);
+  font-size: var(--fs-base);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.faqToggle:hover {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+  border-style: solid;   
+  border-width: 1px; 
+}
+
+/* When FAQ is open, you might want a slightly different style */
+.faqToggleActive {
+  background-color: var(--clr-charcoal);
+  color: var(--clr-mist);
+}
+
+.faqButtonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+
+/* ─── BACKDROP ───────────────────────────────────────────────────────────── */
+.faqBackdrop {
+  position: fixed;
+  inset: 0;                          
+  background: rgba(0, 0, 0, 0.4);    
+  z-index: 999;                      
+}
+
+/* ─── FAQ CARD (OVERLAY) ─────────────────────────────────────────────────── */
+.faqCard {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 600px;      
+  max-height: 85vh;     
+  background-color: var(--clr-mist);
+  border-radius: 0.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  z-index: 1000;       
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── CLOSE “×” BUTTON ────────────────────────────────────────────────────── */
+.faqCloseButton {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem;
+
+/* Make it a perfect circle: */
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: 1px solid var(--clr-blush);
+
+  font-size: 1.5rem;
+  color: var(--clr-blush);
+  font-family: var(--ff-heading);
+  line-height: 1;
+  padding: 0.4rem;         
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  z-index: 1001;            /* above .faqCardContent */
+}
+
+.faqCloseButton:hover,
+.faqCloseButton:focus {
+  background-color: var(--clr-blush);
+  opacity: 0.7;
+  color: var(--clr-mist);
+  outline: 1px solid var(--clr-blush);
+}
+
+/* ─── CONTENT INSIDE THE CARD ────────────────────────────────────────────── */
+.faqCardContent {
+  padding: 1.5rem 2rem;    /* a bit more padding now that card is larger */
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* FAQ CARD TITLE */
+.faqCardTitle {
+  font-family: var(--ff-heading);
+  font-size: 1.75rem;      /* larger title */
+  color: var(--clr-blush);
+  margin: 0 0 1.25rem 0;
+  text-align: center;
+}
+
+/* ACCORDION CONTAINER */
+.faqAccordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;            /* extra vertical spacing between items */
+}
+
+/* ─── INDIVIDUAL FAQ ITEM ───────────────────────────────────────────────── */
+.faqItem {
+  border-bottom: 1px solid var(--clr-charcoal);
+  padding: 0.5rem 0;
+}
+
+/* QUESTION BUTTON */
+.faqQuestion {
+  background: none;
+  border: none;
+  font-family: var(--ff-heading);
+  font-size: 1.125rem;     /* slightly bigger text */
+  color: var(--clr-charcoal);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+  padding: 0.75rem 0;       /* larger hit area */
+  transition: color 0.2s ease;
+  
+}
+
+.faqQuestion:hover,
+.faqQuestion:focus {
+  color: var(--clr-blush);
+  outline: none;
+}
+
+/* “+” / “−” ICON CIRCLE */
+.faqIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 1.5rem;            /* circle diameter */
+  height: 1.5rem;           /* circle diameter */
+  box-sizing: border-box;
+  background-color: var(--clr-blush);
+  border-radius: 50%;
+
+  font-size: 1rem;
+  line-height: 1rem;
+  color: var(--clr-mist);
+  margin-left: 0.5rem;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* EXPANDED vs COLLAPSED STATE */
+.faqQuestion[aria-expanded="true"] .faqIcon {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+  outline: 1px solid var(--clr-blush);
+}
+
+.faqQuestion[aria-expanded="false"] .faqIcon {
+  background-color: var(--clr-blush);
+  color: var(--clr-mist);
+}
+
+/* HOVER/FOCUS STATE for the ICON */
+.faqQuestion:hover .faqIcon,
+.faqQuestion:focus .faqIcon {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+  outline: 1px solid var(--clr-blush);
+}
+
+/* ─── ANSWER TEXT ─────────────────────────────────────────────────────────── */
+.faqAnswer {
+  font-family: var(--ff-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--clr-text);
+  padding: 0.5rem 0 0.5rem 1rem;
+}
+
+/* Mobile: Single column with vertical stacking and padding */
+@media (max-width: 767px) {
+  
+  .aboutContainer {
+    padding-top: 25px; /* or a smaller value that fits better */
+  }
+  
+  .gridLayout {
+    grid-template-columns: 1fr; /* Ensure single column */
+    gap: 1.5rem;                /* Slightly less gap for compactness */
+    padding: 0 1rem 1.5rem;
+  }
+
+  .textColumn {
+    padding: 0 0.5rem;          /* Small horizontal padding */
+  }
+
+  .imageColumn {
+    margin-top: 1.5rem;      /* Increase top margin */
+    margin-bottom: 1.5rem;   /* Add bottom margin for breathing room */
+    padding: 0 0.5rem;
+  }
+
+  .imageStack {
+    max-width: 100%;            /* Full width images */
+    gap: 1rem;                  /* Slightly smaller gap between images */
+  }
+
+  .fabricImage {
+    max-height: 140px;          /* Smaller image height for mobile */
+  }
+}

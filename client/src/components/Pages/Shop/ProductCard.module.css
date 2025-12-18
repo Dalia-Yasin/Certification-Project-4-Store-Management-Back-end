@@ -1,0 +1,223 @@
+/* src/components/Pages/Shop/ProductCard.module.css */
+
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--clr-mist);
+    border: 1px solid var(--clr-sandstone);
+    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  }
+  
+  /* IMAGE: fixed aspect ratio container for uniform size */
+  .imageContainer {
+    position: relative;
+    width: 100%;
+    /* 1:1 aspect ratio for square cards */
+    padding-top: 100%;
+    overflow: hidden;
+  }
+  
+  .imageContainer img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    object-position: top center;
+  }
+  
+  /* DETAILS */
+  .details {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .name {
+    font-family: var(--ff-heading);
+    font-size: var(--fs-h3);
+    color: var(--clr-charcoal);
+    margin: 0;
+  }
+  
+  .price {
+    font-family: var(--ff-body);
+    font-size: var(--fs-base);
+    font-weight: var(--fw-semibold);
+    margin: 0;
+  }
+  
+  .stock {
+    font-family: var(--ff-body);
+    font-size: var(--fs-small);
+    color: var(--clr-charcoal);
+    margin: 0;
+    opacity: 0.75;
+  }
+  
+  .actionsContainer {
+    display: flex;
+    flex-direction: column;  
+    align-items: center;      /* Center horizontally */
+    gap: 1rem;            
+  }
+  
+  /* BUTTON */
+  /* BUTTON */
+.button {
+  max-width: 250px;
+  margin: 0 auto;
+  padding: 0.75rem 2rem;
+
+  font-family: var(--ff-heading);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+
+  background-color: var(--clr-blush);
+  color: var(--clr-mist);
+
+  border: 1px solid var(--clr-blush);
+  cursor: pointer;
+
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.button:disabled {
+  background-color: var(--clr-sandstone);
+  color: var(--clr-charcoal);
+  cursor: not-allowed;
+}
+
+/* Only hover changes the colors */
+.button:hover:not(:disabled) {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+}
+
+/* Focus should NOT change background (keyboard outline only) */
+.button:focus {
+  outline: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--clr-sandstone);
+  outline-offset: 3px;
+}
+
+
+
+
+  .deleteButton {
+    background-color: transparent;
+    color: var(--clr-charcoal);
+    border-color: var(--clr-sandstone);
+  
+    margin-top: 0.75rem;
+    margin-bottom: 2rem; 
+  }
+  
+ 
+
+
+
+  
+  /* LOADING STATE */
+  .loading {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+  
+  .spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid var(--clr-mist);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  .sizePlaceholder {
+    height: 2rem;  
+  }
+
+  .sizeSelector {
+    position: relative;
+    z-index: 1000;;
+    display: flex;
+    flex-direction: column;   /* Stack label above select */
+    align-items: center;      /* Center label and dropdown horizontally */
+    gap: 0.5rem;              /* Space between label and select */
+    width: auto;              /* Allow width to fit content */
+  }
+  
+  .sizeSelector label {
+    margin: 0;
+
+    white-space: normal;      /* Allow wrapping if needed */
+    text-align: center;       /* Center text */
+    width: 100%;              /* Take full width inside sizeSelector */
+  }
+  
+
+  .sizeSelector select {
+    width: 100%;           /* Let it fill the container width */
+    max-width: 250px;      /* Match max-width of container */
+    margin: 0 auto;        /* Center horizontally */
+    display: block;        /* Ensure block level */
+    padding: 0.75rem 1rem;
+    font-size: 1.125rem;
+    box-sizing: border-box;
+  }
+  
+  .sizeSelector label::after {
+    content: ":"; /* Colon appears after label text */
+  }
+  
+  @media (max-width: 768px) {
+    .actionsContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+     
+    }
+    .sizeSelector {
+      flex-direction: column;       /* Stack label above select */
+      align-items: center;          /* Center label and dropdown horizontally */
+      gap: 0.5rem;                 /* Space between label and select */
+      width: 100%;                  /* Full width of container */
+      max-width: 250px;             /* Optional: limit max width */
+      margin: 0 auto;               /* Center the whole size selector block */
+    }
+  
+    .sizeSelector label {
+      margin-bottom: 0.25rem;       /* Space below label */
+      font-weight: 600;             /* Make label a bit bolder */
+      width: 100%;
+      text-align: center;           /* Center the label text */
+    }
+  
+    .sizeSelector select {
+      width: 100%;                  /* Make select full width of sizeSelector */
+      padding: 0.75rem 1rem;
+      font-size: 1.125rem;
+      box-sizing: border-box;
+    }
+  
+    .card {
+      margin: 0.5rem 0;
+    }
+  }
+  

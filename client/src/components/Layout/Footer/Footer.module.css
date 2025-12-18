@@ -1,0 +1,183 @@
+/* src/components/Layout/Footer/Footer.module.css */
+
+.heading {
+  font-size: var(--fs-h2);
+  margin: 0;
+  color: var(--clr-blush);
+  font-family: var(--ff-heading);
+}
+
+.footer {
+  background-color: var(--clr-sandstone);
+  color: var(--clr-blush);
+  padding: 4rem 2rem 1rem;
+  font-family: var(--ff-body);
+}
+
+.footerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+/* Newsletter section */
+.newsletter {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap; /* ✅ allow wrapping on smaller widths */
+}
+
+.emailInput {
+  flex: 1 1 220px; /* ✅ can shrink and wrap nicely */
+  min-width: 0;    /* ✅ prevents overflow in flex */
+  padding: 0.5rem;
+  border: 2px solid var(--clr-mist);
+  border-radius: 4px;
+  font-family: var(--ff-body);
+  font-size: var(--fs-base);
+}
+
+.subscribeButton {
+  box-sizing: border-box;
+  width: 10rem;
+  height: 2.5rem;
+  line-height: 2.5rem;
+  white-space: nowrap;
+  text-align: center;
+  background-color: var(--clr-blush);
+  color: var(--clr-mist);
+  font-family: var(--ff-heading);
+  font-size: var(--fs-base);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.subscribeButton:hover,
+.subscribeButton:focus {
+  background-color: var(--clr-mist);
+  color: var(--clr-blush);
+  border-color: var(--clr-charcoal);
+  outline: none;
+}
+
+/* Social links */
+.socialLinks {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.socialLink {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid transparent; /* reserves space (no layout shift) */
+  border-radius: 8px;
+
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.socialLink:hover {
+  border-color: var(--clr-blush);
+}
+
+.socialLink:focus-visible {
+  border-color: var(--clr-blush);
+  outline: 2px solid var(--clr-blush);
+  outline-offset: 2px;
+}
+
+.socialIcon {
+  width: 24px;
+  height: 24px;
+  display: block; /* removes inline-image baseline weirdness */
+  object-fit: contain;
+  filter: none;
+}
+
+/* Footer navigation links */
+.footerNav {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  column-gap: 2rem;
+}
+
+.footerLinks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.footerLink {
+  color: var(--clr-blush);
+  text-decoration: none;
+  font-size: var(--fs-small);
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover,
+.footerLink:focus {
+  color: var(--clr-charcoal);
+}
+
+/* Legal and attribution */
+.legal {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: var(--fs-small);
+  color: var(--clr-charcoal);
+}
+
+.copy {
+  margin: 0.5rem 0;
+}
+
+.attribution {
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .footerContainer {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .legal {
+    margin-top: 1.5rem;
+  }
+
+  .newsletterForm {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .subscribeButton {
+    width: 100%;
+  }
+
+  .emailInput {
+    flex: 0 0 auto;  
+    width: 100%;
+    height: 2.75rem; 
+  }
+}

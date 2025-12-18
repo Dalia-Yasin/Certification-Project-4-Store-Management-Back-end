@@ -1,0 +1,11 @@
+/* src/App.module.css */
+.appShell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .page {
+    flex: 1;
+  }
+  

@@ -1,0 +1,151 @@
+/* src/components/Pages/Shop/Filters/Filters.module.css */
+
+/* Container for all three controls */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;               /* space between controls */
+    justify-content: center; /* center on wide screens */
+    margin: 2rem 0;          /* vertical spacing above & below */
+  }
+  
+  /* Each individual control (label + input/select) */
+  .control {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;        /* floor width */
+    max-width: 300px;        /* cap width on large screens */
+  }
+  
+  /* Label above each field */
+  .label {
+    font-family: var(--ff-heading);
+    font-size: var(--fs-small);
+    color: var(--clr-charcoal);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Shared styles for text input and select dropdown */
+  .input,
+  .select {
+    padding: 0.5rem 0.75rem;
+    /* extra right padding to accommodate icon/arrow */
+    padding-right: 2.5rem;
+    font-family: var(--ff-body);
+    font-size: var(--fs-base);
+    color: var(--clr-charcoal);
+    background-color: var(--clr-mist);
+    border: 1px solid var(--clr-charcoal);
+    border-radius: 4px;
+    outline: none;
+    transition: 
+      border-color 0.2s ease, 
+      box-shadow   0.2s ease, 
+      background-color 0.2s ease;
+  }
+  
+  /* Placeholder color for search input */
+  .input::placeholder {
+    color: var(--clr-charcoal);
+    opacity: 0.6;
+  }
+  
+  /* Hover state for inputs/selects */
+  .input:hover,
+  .select:hover {
+    background-color: #ffffff;
+  }
+  
+  /* Focus state */
+  .input:focus,
+  .select:focus {
+    border-color: var(--clr-blush);
+    /* subtle glow */
+    box-shadow: 0 0 0 2px rgba(215, 207, 199, 0.5);
+  }
+  
+  /* Custom arrow on select */
+  .select {
+    appearance: none;
+    background-image:
+      url("data:image/svg+xml;charset=UTF-8,%3Csvg width='12' height='12' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23393840' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+  }
+  
+  /* Hide default dropdown arrow in IE */
+  .select::-ms-expand {
+    display: none;
+  }
+  
+  /* Search-specific wrapper for icon */
+  .searchWrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Visually hide label but keep for screen readers */
+  .srOnly {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Search icon styling */
+  .searchIcon {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--clr-charcoal);
+    opacity: 0.6;
+
+  }
+  .searchIcon svg {
+    stroke-width: 2;
+  }
+  
+  /* Wraps each control so we can apply consistent spacing */
+.filterGroup {
+    /* ensure each control stays grouped and spaced */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;       /* space between label and field */
+  }
+  
+  /* Style for the “Clear Filters” button */
+  .clearButton {
+    margin-top: 1rem;
+    align-self: flex-end;   /* push it to the right of the filter row */
+    background: none;
+    border: none;
+    font-family: var(--ff-body);
+    font-size: var(--fs-small);
+    color: var(--clr-charcoal);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .clearButton:hover,
+  .clearButton:focus {
+    color: var(--clr-blush);
+    outline: none;
+  }
+  /* Mobile: stack controls full‑width */
+  @media (max-width: 600px) {
+    .control {
+      min-width: 100%;
+      max-width: none;
+    }
+  }
+  
