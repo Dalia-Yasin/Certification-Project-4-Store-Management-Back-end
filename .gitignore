@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# env
+.env
+**/.env
+
+# logs
+*.log
+
+# OS
+.DS_Store
+
+# builds
+dist/
+build/
+coverage/
+
+# env variants
+.env.*
+**/.env.*
+
+# vite cache
+.vite/
+**/.vite/
