@@ -3,17 +3,22 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
-const sequelize = require("./db");
-const Product = require("./models/Product");
+const { sequelize, Product, Order, OrderItem } = require("./models");
 
 async function seed() {
   try {
     await sequelize.authenticate();
     console.log("✅ DB connected (seed)");
 
-    await sequelize.sync(); // dev: you can use { alter: true } if schema changes often
+    // Ensure tables exist
+    await sequelize.sync();
 
+    // Load seed data
     const filePath = path.join(__dirname, "data", "products.seed.json");
+    if (!fs.existsSync(filePath)) {
+      throw new Error(`Seed file not found: ${filePath}`);
+    }
+
     const items = JSON.parse(fs.readFileSync(filePath, "utf-8"));
 
     const cleaned = items.map(({ id, ...p }) => ({
@@ -28,7 +33,12 @@ async function seed() {
       isActive: p.isActive ?? true,
     }));
 
+    // ✅ Clear child tables first (avoids FK issues)
+    await OrderItem.destroy({ where: {}, truncate: true, restartIdentity: true });
+    await Order.destroy({ where: {}, truncate: true, restartIdentity: true });
     await Product.destroy({ where: {}, truncate: true, restartIdentity: true });
+
+    // Re-insert products
     await Product.bulkCreate(cleaned, { validate: true });
 
     console.log(`✅ Seeded ${cleaned.length} products`);

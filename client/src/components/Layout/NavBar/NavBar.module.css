@@ -147,7 +147,7 @@
   width: 2.5rem;
   height: 2.5rem;
   background-color: var(--clr-blush);
-  background-image: url('/public/images/SVG/cart.png');
+  background-image: url('/images/SVG/cart.png');
   background-repeat: no-repeat;
   background-position: center;
   border: none;
@@ -162,7 +162,7 @@
 .cartButton:hover,
 .cartButton:focus {
   background-color: var(--clr-mist);
-  background-image: url('/public//images//SVG//cart-blush.svg.png');
+  background-image: url('/images/SVG/cart-blush.png');
   outline: none;
 }
 

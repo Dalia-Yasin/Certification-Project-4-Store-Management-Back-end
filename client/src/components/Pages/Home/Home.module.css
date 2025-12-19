@@ -4,9 +4,9 @@
   position: relative;
   width: 100%;
   /* Adjust this if your header height changes */
-  background: url('/public/images/background/hero_background.jpg') center top / cover no-repeat;
+  background: url('/images/background/hero_background.jpg') center top / cover no-repeat;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   min-height: calc(100vh - 150px);
  
 }

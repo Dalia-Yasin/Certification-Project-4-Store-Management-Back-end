@@ -2,7 +2,10 @@
 import { createAsyncThunk, createSlice, createSelector } from "@reduxjs/toolkit";
 
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const API_BASE = import.meta.env.PROD
+  ? "" // same origin in production (served by Express)
+  : (import.meta.env.VITE_API_URL || "http://localhost:3001");
+
 
 export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",

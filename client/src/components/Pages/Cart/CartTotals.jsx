@@ -1,9 +1,16 @@
 import React, { useState, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { decrementStockLocal, selectProducts } from "../../../redux/slices/productsSlice";
+import { selectProducts, fetchProducts } from "../../../redux/slices/productsSlice";
 import { clearCart, selectCartItems } from "../../../redux/slices/cartSlice";
 import { setPage, PAGES } from "../../../redux/slices/pageSlice";
+
+import {
+  createOrder,
+  selectOrderLoading,
+  selectOrderError,
+  selectLastOrder,
+} from "../../../redux/slices/ordersSlice";
 
 import styles from "../Cart/Cart.module.css";
 
@@ -35,7 +42,9 @@ const calculateProvincialTax = (province, itemLineTotal, product) => {
 
   switch (province) {
     case "BC":
-      return isClothingOrFootwear && !isChildrenItem && price >= 100 ? 0.07 * itemLineTotal : 0;
+      return isClothingOrFootwear && !isChildrenItem && price >= 100
+        ? 0.07 * itemLineTotal
+        : 0;
     case "MB":
       return isClothingOrFootwear && !isChildrenItem ? 0.07 * itemLineTotal : 0;
     case "SK":
@@ -59,6 +68,11 @@ export default function CartTotals() {
   const cartItems = useSelector(selectCartItems); // [{ productId, quantity, size }]
   const products = useSelector(selectProducts);
 
+  // ✅ orders state (for button + error message)
+  const orderLoading = useSelector(selectOrderLoading);
+  const orderError = useSelector(selectOrderError);
+  const lastOrder = useSelector(selectLastOrder);
+
   const [errors, setErrors] = useState({
     shippingOption: "",
     shippingProvince: "",
@@ -74,12 +88,12 @@ export default function CartTotals() {
 
   const enrichedItems = useMemo(() => {
     return cartItems.map(({ productId, quantity, size }) => {
-      const product = products.find((p) => p.id === productId);
+      const product = products.find((p) => Number(p.id) === Number(productId));
       const price = Number(product?.price ?? 0);
       const qty = Number(quantity ?? 0);
-  
+
       return {
-        productId,
+        productId: Number(productId),
         size: size ?? "",
         product,
         quantity: qty,
@@ -103,11 +117,7 @@ export default function CartTotals() {
 
         const itemLineTotal = Number(product.price ?? 0) * quantity;
         const gst = 0.05 * itemLineTotal;
-        const provincialTax = calculateProvincialTax(
-          shippingProvince,
-          itemLineTotal,
-          product
-        );
+        const provincialTax = calculateProvincialTax(shippingProvince, itemLineTotal, product);
 
         return {
           gstTotal: acc.gstTotal + gst,
@@ -121,7 +131,8 @@ export default function CartTotals() {
 
   const grandTotal = subtotal + (selectedShipping?.price || 0) + totalTax;
 
-  const handlePurchase = () => {
+  //  REAL checkout: create order + decrement stock on server
+  const handlePurchase = async () => {
     const newErrors = {
       shippingOption: !shippingOption ? "Please select a shipping option" : "",
       shippingProvince: !shippingProvince ? "Please select a province" : "",
@@ -130,14 +141,20 @@ export default function CartTotals() {
 
     if (!shippingOption || !shippingProvince) return;
 
-    // Local stock decrement (optional UI feedback)
-    cartItems.forEach(({ productId, quantity }) => {
-      dispatch(decrementStockLocal({ id: productId, amount: quantity }));
-    });
-    
+    const itemsForApi = cartItems.map((it) => ({
+      productId: Number(it.productId),
+      quantity: Number(it.quantity),
+      size: it.size ?? "",
+    }));
 
-    dispatch(clearCart());
-    dispatch(setPage(PAGES.CONFIRMATION));
+    try {
+      await dispatch(createOrder(itemsForApi)).unwrap();
+      dispatch(clearCart());
+      dispatch(fetchProducts()); // refresh stock from backend
+      dispatch(setPage(PAGES.CONFIRMATION));
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   if (cartItems.length === 0) return null;
@@ -235,8 +252,16 @@ export default function CartTotals() {
         <span>${grandTotal.toFixed(2)}</span>
       </div>
 
-      <button onClick={handlePurchase} className={styles.checkoutButton}>
-        Complete Purchase
+      {/* checkout status */}
+      {orderError && <p className={styles.errorText}>{orderError}</p>}
+      {lastOrder?.id && <p style={{ marginTop: 8 }}>✅ Order #{lastOrder.id} created!</p>}
+
+      <button
+        onClick={handlePurchase}
+        className={styles.checkoutButton}
+        disabled={orderLoading}
+      >
+        {orderLoading ? "Processing..." : "Complete Purchase"}
       </button>
     </div>
   );

@@ -1,163 +1,50 @@
+// server/index.js
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
-const { Op } = require("sequelize");
+console.log("ADMIN_KEY loaded?", !!process.env.ADMIN_KEY, "len:", process.env.ADMIN_KEY?.length);
 
 
-const sequelize = require("./db");
-const Product = require("./models/Product");
+const { sequelize, Product, Order, OrderItem } = require("./models");
+
+// ✅ import modular routers
+const productsRoutes = require("./routes/products");
+const ordersRoutes = require("./routes/orders");
+
+const requireAdmin = require("./middleware/requireAdmin");
 
 const app = express();
 
-// middleware
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }));
+// ✅ middleware
+app.use(
+  cors(
+    process.env.NODE_ENV === "production"
+      ? undefined
+      : { origin: process.env.CLIENT_ORIGIN || "http://localhost:5173" }
+  )
+);
 app.use(express.json());
 
-// routes
-app.get("/", (req, res) => {
-  res.send("API is running Try /health");
-});
+// ✅ basic routes
+app.get("/", (req, res) => res.send("API is running. Try /health"));
+app.get("/health", (req, res) => res.json({ ok: true }));
 
-app.get("/health", (req, res) => {
-  res.json({ ok: true });
-});
+// ✅ mount routers
+app.use("/api/products", productsRoutes({ Product }));
+app.use("/api/orders", ordersRoutes({ sequelize, Product, Order, OrderItem }));
 
-app.get("/api/products", async (req, res, next) => {
-  try {
-    const {
-      search = "",
-      category,
-      sort = "name-asc",
-      inStock,
-    } = req.query;
+// ✅ Serve React build in production (BEFORE 404)
+if (process.env.NODE_ENV === "production") {
+  const clientDist = path.join(__dirname, "..", "client", "dist");
 
-    const where = {};
+  app.use(express.static(clientDist));
 
-    // SEARCH (name OR description)
-    if (search.trim()) {
-      where[Op.or] = [
-        { name: { [Op.iLike]: `%${search.trim()}%` } },
-        { description: { [Op.iLike]: `%${search.trim()}%` } },
-      ];
-    }
-
-    // CATEGORY (ignore "all")
-    if (category && category !== "all") {
-      where.category = { [Op.iLike]: category }; // case-insensitive exact match
-    }
-
-    // IN STOCK FILTER
-    if (inStock === "true") {
-      where.stock = { [Op.gt]: 0 };
-    }
-
-    // SORT
-    let order = [["name", "ASC"]];
-    switch (sort) {
-      case "name-desc":
-        order = [["name", "DESC"]];
-        break;
-      case "price-asc":
-        order = [["price", "ASC"]];
-        break;
-      case "price-desc":
-        order = [["price", "DESC"]];
-        break;
-      case "stock-asc":
-        order = [["stock", "ASC"]];
-        break;
-      case "stock-desc":
-        order = [["stock", "DESC"]];
-        break;
-      case "name-asc":
-      default:
-        order = [["name", "ASC"]];
-        break;
-    }
-
-    const products = await Product.findAll({ where, order });
-    res.json(products);
-  } catch (err) {
-    next(err);
-  }
-});
-
-
-// GET one product by id
-app.get("/api/products/:id", async (req, res, next) => {
-  try {
-    const id = Number(req.params.id);
-    if (!Number.isInteger(id)) return res.status(400).json({ error: "Invalid id" });
-
-    const product = await Product.findByPk(id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
-
-    res.json(product);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// CREATE product
-app.post("/api/products", async (req, res, next) => {
-  try {
-    const { name, category, price, stock, image, sizes, shoeSizes, description, isActive } = req.body;
-
-    if (!name || !category || price === undefined) {
-      return res.status(400).json({ error: "name, category, and price are required" });
-    }
-
-    const created = await Product.create({
-      name,
-      category,
-      price, // ok as "19.99" or 19.99
-      stock: stock ?? 0,
-      image: image ?? null,
-      sizes: sizes ?? null,
-      shoeSizes: shoeSizes ?? null,
-      description: description ?? null,
-      isActive: isActive ?? true,
-    });
-
-    res.status(201).json(created);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// UPDATE product (partial update)
-app.patch("/api/products/:id", async (req, res, next) => {
-  try {
-    const id = Number(req.params.id);
-    if (!Number.isInteger(id)) return res.status(400).json({ error: "Invalid id" });
-
-    const product = await Product.findByPk(id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
-
-    // prevent changing id fields
-    const { id: _id, createdAt, updatedAt, ...updates } = req.body;
-
-    await product.update(updates);
-    res.json(product);
-  } catch (err) {
-    next(err);
-  }
-});
-
-// DELETE product
-app.delete("/api/products/:id", async (req, res, next) => {
-  try {
-    const id = Number(req.params.id);
-    if (!Number.isInteger(id)) return res.status(400).json({ error: "Invalid id" });
-
-    const deletedCount = await Product.destroy({ where: { id } });
-    if (!deletedCount) return res.status(404).json({ error: "Product not found" });
-
-    res.status(204).send();
-  } catch (err) {
-    next(err);
-  }
-});
+  // SPA fallback (don’t hijack /api routes)
+  app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+}
 
 // 404 handler
 app.use((req, res) => {
@@ -173,13 +60,13 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 3001;
 
 async function start() {
-  await sequelize.authenticate(); // connects to Postgres
+  await sequelize.authenticate();
   console.log("DB connected");
 
-  await sequelize.sync(); // creates tables if they don't exist 
-  console.log(" Tables synced");
+  await sequelize.sync();
+  console.log("Tables synced");
 
-  app.listen(PORT, () => { // starts listening to the port
+  app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 }

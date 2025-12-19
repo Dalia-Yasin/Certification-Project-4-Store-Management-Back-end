@@ -3,6 +3,7 @@ import pageReducer from './slices/pageSlice'
 import productsReducer from './slices/productsSlice'
 import cartReducer from './slices/cartSlice'
 import filtersReducer from './slices/filtersSlice'
+import ordersReducer from "./slices/ordersSlice";
 
 // Change to default export
 export default configureStore({
@@ -11,5 +12,6 @@ export default configureStore({
     products: productsReducer,
     cart: cartReducer,
     filters: filtersReducer,
+    orders: ordersReducer,
   },
 })
