@@ -5,10 +5,9 @@ const path = require("path");
 require("dotenv").config();
 console.log("ADMIN_KEY loaded?", !!process.env.ADMIN_KEY, "len:", process.env.ADMIN_KEY?.length);
 
-
 const { sequelize, Product, Order, OrderItem } = require("./models");
 
-// ✅ import modular routers
+// import modular routers
 const productsRoutes = require("./routes/products");
 const ordersRoutes = require("./routes/orders");
 
@@ -16,7 +15,7 @@ const requireAdmin = require("./middleware/requireAdmin");
 
 const app = express();
 
-// ✅ middleware
+// middleware
 app.use(
   cors(
     process.env.NODE_ENV === "production"
@@ -26,25 +25,13 @@ app.use(
 );
 app.use(express.json());
 
-// ✅ basic routes
+// basic routes
 app.get("/", (req, res) => res.send("API is running. Try /health"));
 app.get("/health", (req, res) => res.json({ ok: true }));
 
-// ✅ mount routers
+// mount routers
 app.use("/api/products", productsRoutes({ Product }));
 app.use("/api/orders", ordersRoutes({ sequelize, Product, Order, OrderItem }));
-
-// ✅ Serve React build in production (BEFORE 404)
-if (process.env.NODE_ENV === "production") {
-  const clientDist = path.join(__dirname, "..", "client", "dist");
-
-  app.use(express.static(clientDist));
-
-  // SPA fallback (don’t hijack /api routes)
-  app.get(/^\/(?!api).*/, (req, res) => {
-    res.sendFile(path.join(clientDist, "index.html"));
-  });
-}
 
 // 404 handler
 app.use((req, res) => {
