@@ -8,7 +8,7 @@ import heroBg from "../../../assets/background/hero_background.jpg";
 export default function Home() {
   const dispatch = useDispatch();
 
-  const goToAbout = () => dispatch(setPage(PAGES.ABOUT)); // or "about" if that's what your slice uses
+  const goToAbout = () => dispatch(setPage(PAGES.ABOUT));
 
   return (
     <section
@@ -20,15 +20,21 @@ export default function Home() {
 
       <div className={styles.content}>
         <div className={styles.textContainer}>
-          <h1 className={styles.heroTitle}>Montessart</h1>
           <p className={styles.body}>
             Montessart is a contemporary fashion brand that blends minimalist
-            elegance with organic inspiration. Drawing from both the quiet
-            strength of mountains and the gentle flow of nature, our chic
-            clothing and accessories are designed for those who seek
-            high-quality fabrics and timeless silhouettes—where simplicity meets
-            sophistication.
+            elegance with organic inspiration.
           </p>
+          
+          <p className={styles.body}>
+            Drawing from both the quiet strength of mountains and the gentle
+            flow of nature, our chic clothing and accessories are designed
+            for those who seek high-quality fabrics and timeless silhouettes.
+          </p>
+          
+          <p className={styles.body}>
+            Where simplicity meets sophistication.
+          </p>
+          
           <p className={styles.tagline}>
             <em>Simplicity, elevated.</em>
           </p>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
 import { addToCart } from "../../../redux/slices/cartSlice";
-import { deleteProduct } from "../../../redux/slices/productsSlice";
 
 import styles from "./ProductCard.module.css";
 
@@ -12,7 +11,6 @@ export default function ProductCard({ product }) {
   const { id, name, image, price, stock } = product;
 
   const [isAdding, setIsAdding] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [selectedSize, setSelectedSize] = useState("");
 
   const handleAdd = () => {
@@ -36,23 +34,6 @@ export default function ProductCard({ product }) {
     }
 
     setIsAdding(false);
-  };
-
-  const handleDelete = async () => {
-    if (isDeleting) return;
-
-    const ok = window.confirm(`Delete "${name}"? This cannot be undone.`);
-    if (!ok) return;
-
-    setIsDeleting(true);
-    try {
-      await dispatch(deleteProduct(id)).unwrap();
-      // product will disappear because reducer filters it out
-    } catch (err) {
-      alert(err || "Failed to delete product");
-    } finally {
-      setIsDeleting(false);
-    }
   };
 
   return (
@@ -88,7 +69,6 @@ export default function ProductCard({ product }) {
               value={selectedSize}
               onChange={(e) => setSelectedSize(e.target.value)}
               className={styles.select}
-              disabled={isDeleting}
             >
               <option value="">-- Choose a size --</option>
               {(product.sizes || product.shoeSizes).map((size) => (
@@ -104,7 +84,7 @@ export default function ProductCard({ product }) {
           id={`add-to-cart-${id}`}
           className={`${styles.button} ${isAdding ? styles.loading : ""}`}
           onClick={handleAdd}
-          disabled={stock <= 0 || isAdding || isDeleting}
+          disabled={stock <= 0 || isAdding}
           aria-label={stock > 0 ? `Add ${name} to cart` : `${name} is out of stock`}
         >
           {isAdding ? (
@@ -116,17 +96,7 @@ export default function ProductCard({ product }) {
           )}
         </button>
 
-        {/* DELETE button */}
-        <button
-          type="button"
-          className={`${styles.button} ${styles.deleteButton}`}
-
-          onClick={handleDelete}
-          disabled={isDeleting}
-          aria-label={`Delete ${name}`}
-        >
-          {isDeleting ? "Deleting..." : "Delete"}
-        </button>
+  
       </div>
     </div>
   );
