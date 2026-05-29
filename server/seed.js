@@ -33,10 +33,15 @@ async function seed() {
       isActive: p.isActive ?? true,
     }));
 
-    // ✅ Clear child tables first (avoids FK issues)
-    await OrderItem.destroy({ where: {}, truncate: true, restartIdentity: true });
-    await Order.destroy({ where: {}, truncate: true, restartIdentity: true });
-    await Product.destroy({ where: {}, truncate: true, restartIdentity: true });
+ 
+// ✅ Clear tables in one TRUNCATE (FK-safe in Postgres)
+await sequelize.query(`
+  TRUNCATE TABLE "order_items", "orders", "products"
+  RESTART IDENTITY
+  CASCADE;
+`);
+
+
 
     // Re-insert products
     await Product.bulkCreate(cleaned, { validate: true });
