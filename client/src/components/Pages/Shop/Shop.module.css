@@ -12,14 +12,16 @@
   .filters {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
   }
   
   .filterControl {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
+    flex: 0 1 220px;
   }
   
   .filterControl label {
@@ -30,6 +32,7 @@
     letter-spacing: 0.05em;
     margin-bottom: 0.5rem;
     border-radius: 4px;
+    white-space: nowrap;
   }
   
   .filterControl select,
@@ -38,21 +41,19 @@
     font-family: var(--ff-body);
     border: 1px solid var(--clr-charcoal);
     border-radius: 4px;
-    min-width: 160px;
+    min-width: 220px;
+    width: 100%;
+    box-sizing: border-box;
   }
-  
   /* Responsive grid of product cards */
   .grid {
     display: grid;
-    grid-template-columns: repeat(4, minmax(250px, 1fr));
-    gap: 3rem 1rem; 
-    padding: 2rem 0rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    padding: 1.5rem 0 2rem;
     width: 100%;
-  }
-  
-  /* Center grid if fewer items */
-  .shop .grid {
-    justify-content: center;
+    align-items: start;
   }
   
   /* Loading spinner container */
@@ -99,20 +100,41 @@
   .resetFilters:hover {
     filter: brightness(1.1);
   }
+
+  @media (max-width: 1024px) {
+    .shop {
+      padding: 0 1.5rem;
+    }
   
-  /* Mobile: single column for filters and grid */
-  @media (max-width: 480px) {
-    .filters {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    .filterControl select,
-    .filterControl input {
-      min-width: 100%;
-    }
     .grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     }
   }
   
+  @media (max-width: 768px) {
+    .shop {
+      padding: 0 1rem;
+    }
+  
+    .filters {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+  
+    .filterControl {
+      width: 100%;
+    }
+  
+    .filterControl select,
+    .filterControl input {
+      min-width: 0;
+      width: 100%;
+    }
+  
+    .grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.25rem;
+      padding-top: 1rem;
+    }
+  }
